@@ -1,0 +1,913 @@
+{%- comment -%}
+  Masterclass Soft Glam — Alejandra Galeano
+  Section autocontenida v4 para el tema Savor.
+  Pensada para usarse con templates/page.masterclass-soft-glam.json
+  VERSION: v4-savor (responsive + video 9:16 + safety guards) — 2026-06-05
+{%- endcomment -%}
+
+<script>console.log('%c MSG Soft Glam v4-savor ', 'background:#8C5E40;color:#F3EBE1;padding:4px 8px;border-radius:4px;font-weight:bold');</script>
+
+{%- if section.settings.hide_theme_chrome -%}
+<style>
+  body > .shopify-section[id*="header"],
+  body > .shopify-section[id*="footer"],
+  body > .shopify-section.shopify-section--header,
+  body > .shopify-section.shopify-section--footer,
+  #shopify-section-header, #shopify-section-footer,
+  shopify-section-header, shopify-section-footer,
+  header.shopify-section, footer.shopify-section,
+  #header-group, #footer-group { display: none !important; }
+</style>
+{%- endif -%}
+
+<script>
+  /* Asset URLs servidos por Shopify CDN (resueltos por Liquid) */
+  window.MSG_ASSETS = {
+    aleHero: {{ 'alejandra-hero.jpg'        | asset_url | json }},
+    alePro:  {{ 'alejandra-pro.jpg'         | asset_url | json }},
+    pUgc1:   {{ 'poster-ugc-1.jpg'          | asset_url | json }},
+    pUgc2:   {{ 'poster-ugc-2.jpg'          | asset_url | json }},
+    pPromo:  {{ 'poster-masterclass-promo.jpg' | asset_url | json }},
+    ugc1:    {{ 'ugc-1.mp4'                 | asset_url | json }},
+    ugc2:    {{ 'ugc-2.mp4'                 | asset_url | json }},
+    promo:   {{ 'masterclass-promo.mp4'     | asset_url | json }}
+  };
+  /* URL del checkout / producto en Shopify — editable desde el theme editor (settings) */
+  window.MSG_CHECKOUT_URL = {{ section.settings.checkout_url | default: '/products/masterclass-soft-glam' | json }};
+</script>
+
+{% raw %}
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          cream:  '#F3EBE1',
+          ink:    '#2B2019',
+          rose:   '#8A5A3D',
+          peach:  '#C7A172',
+          line:   '#E2D7C8',
+          silver: '#A99F92',
+          gradA:  '#8C5E40',
+          gradB:  '#C2986B'
+        },
+        fontFamily: {
+          serif: ['Fraunces', 'Georgia', 'serif'],
+          sans:  ['Inter', 'system-ui', 'sans-serif']
+        },
+        maxWidth: { content: '1180px' }
+      }
+    }
+  };
+</script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+<style>
+  #msg-root, #msg-root * { box-sizing: border-box; }
+  #msg-root { background: #F3EBE1 !important; color: #2B2019 !important; -webkit-font-smoothing: antialiased; font-family: 'Inter', system-ui, sans-serif; position: relative; isolation: isolate; overflow-x: hidden; }
+  #msg-root .reveal { min-width: 0; }
+  #msg-root img, #msg-root video { max-width: 100% !important; height: auto; display: block; }
+  #msg-root ::selection { background: rgba(138,90,61,0.20); }
+
+  #msg-root .font-display { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }
+  #msg-root .headline { letter-spacing: -0.018em; line-height: 1.04; }
+
+  #msg-root .grad-cta {
+    background-image: linear-gradient(100deg, #8C5E40 0%, #C2986B 50%, #8C5E40 100%);
+    background-size: 220% 100%;
+    background-position: 0% 50%;
+    transition: background-position 0.8s ease, box-shadow 0.5s ease, transform 0.3s ease;
+    box-shadow: 0 10px 30px -12px rgba(122,79,55,0.55);
+    cursor: pointer;
+  }
+  #msg-root .grad-cta:hover { background-position: 100% 50%; box-shadow: 0 16px 40px -12px rgba(122,79,55,0.7); transform: translateY(-1px); }
+  #msg-root .grad-cta:active { transform: translateY(0); }
+
+  #msg-root .grad-text {
+    background-image: linear-gradient(100deg, #8C5E40, #C2986B);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  @keyframes msgMarqueeUp { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+  #msg-root .marquee-track { animation: msgMarqueeUp 32s linear infinite; }
+  #msg-root .marquee-pause:hover .marquee-track { animation-play-state: paused; }
+
+  @keyframes msgMarqueeLeft { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  #msg-root .row-track { animation: msgMarqueeLeft 46s linear infinite; }
+  #msg-root .row-pause:hover .row-track { animation-play-state: paused; }
+  #msg-root .row-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
+  }
+
+  /* DEFENSA: reveal por defecto visible; solo se oculta cuando JS le pone reveal-armed */
+  #msg-root .reveal { opacity: 1; }
+  #msg-root .reveal-armed { opacity: 0; transform: translateY(34px) scale(0.985); filter: blur(12px); transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1), filter 1s cubic-bezier(.2,.7,.2,1); will-change: opacity, transform, filter; }
+  #msg-root .reveal-armed.is-in { opacity: 1; transform: none; filter: blur(0); }
+
+  @keyframes msgFloaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  #msg-root .floaty { animation: msgFloaty 5s ease-in-out infinite; }
+
+  @media (prefers-reduced-motion: reduce) {
+    #msg-root .reveal-armed { opacity: 1 !important; transform: none !important; filter: none !important; }
+    #msg-root .marquee-track, #msg-root .row-track, #msg-root .floaty { animation: none; }
+  }
+
+  #msg-root .glow { filter: blur(70px); border-radius: 9999px; opacity: 0.55; }
+
+  /* DEFENSA: grids responsive con !important anti-override del tema */
+  @media (max-width: 639px) {
+    #msg-root .msg-grid-2, #msg-root .msg-grid-3, #msg-root .msg-grid-4, #msg-root .msg-hero { grid-template-columns: 1fr !important; }
+  }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    #msg-root .msg-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    #msg-root .msg-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    #msg-root .msg-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    #msg-root .msg-hero  { grid-template-columns: 1fr !important; }
+  }
+  @media (min-width: 1024px) {
+    #msg-root .msg-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    #msg-root .msg-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+    #msg-root .msg-grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+    #msg-root .msg-hero  { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr) !important; }
+  }
+
+  #msg-root .faq-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.45s cubic-bezier(.2,.7,.2,1); }
+  #msg-root .faq-panel.open { grid-template-rows: 1fr; }
+  #msg-root .faq-panel > div { overflow: hidden; }
+
+  #msg-root :focus-visible { outline: 2px solid #8A5A3D; outline-offset: 3px; border-radius: 6px; }
+
+  html { scroll-behavior: smooth; }
+</style>
+
+<div id="msg-root"></div>
+
+<script type="text/babel">
+  const { useState, useEffect, useRef } = React;
+  const A = window.MSG_ASSETS;
+  const CHECKOUT_URL = window.MSG_CHECKOUT_URL || '/products/masterclass-soft-glam';
+
+  function scrollToId(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  const goOffer = () => { window.location.href = CHECKOUT_URL; };
+
+  function Icon({ name, className = '', stroke = 1.5 }) {
+    const p = { fill: 'none', stroke: 'currentColor', strokeWidth: stroke, strokeLinecap: 'round', strokeLinejoin: 'round' };
+    const paths = {
+      arrow: <path d="M5 12h14M13 6l6 6-6 6" {...p} />,
+      check: <path d="M5 12.5l4.2 4.2L19 7" {...p} />,
+      spark: <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.3 6.3l2.5 2.5M15.2 15.2l2.5 2.5M17.7 6.3l-2.5 2.5M8.8 15.2l-2.5 2.5" {...p} />,
+      wallet: <path d="M3 8.5A2.5 2.5 0 015.5 6H18a2 2 0 012 2v1H6a1 1 0 100 2h14v6a2 2 0 01-2 2H5.5A2.5 2.5 0 013 16.5v-8zM17 13.5h.01" {...p} />,
+      mirror: <path d="M12 3a6 6 0 016 6c0 3.5-2.7 5.7-6 6.2C8.7 14.7 6 12.5 6 9a6 6 0 016-6zM12 15.2V21M9 21h6" {...p} />,
+      face: <path d="M12 3a9 9 0 100 18 9 9 0 000-18zM9 10h.01M15 10h.01M8.8 14.5c1 1.1 2 1.6 3.2 1.6s2.2-.5 3.2-1.6" {...p} />,
+      brush: <path d="M14.5 3.5l6 6L11 19l-4 1 1-4 6.5-12.5zM13 6l5 5" {...p} />,
+      eye: <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12zM12 9.2a2.8 2.8 0 100 5.6 2.8 2.8 0 000-5.6z" {...p} />,
+      drop: <path d="M12 3.5c3.2 3.6 5.5 6.4 5.5 9.4A5.5 5.5 0 016.5 13c0-3 2.3-5.8 5.5-9.5z" {...p} />,
+      lips: <path d="M3.5 10c2-2 4-1.5 5.5-.4C10 8.4 11 8 12 8s2 .4 3 1.6C16.5 8.5 18.5 8 20.5 10c-1 .5-2 2-4 3.4S13.5 16 12 16s-2.5-1.2-4.5-2.6S4.5 10.5 3.5 10z" {...p} />,
+      crown: <path d="M4 8l3.5 3L12 5l4.5 6L20 8l-1.5 9h-13L4 8zM6 20h12" {...p} />,
+      pen: <path d="M14.5 4.5l5 5M4 20l1-4L16.5 4.5a2.1 2.1 0 013 3L8 19l-4 1z" {...p} />,
+      play: <path d="M8 5.5v13l11-6.5-11-6.5z" fill="currentColor" stroke="none" />,
+      sound: <path d="M5 9v6h3l5 4V5L8 9H5zM16 9.5a3.5 3.5 0 010 5M18.5 7a7 7 0 010 10" {...p} />,
+      mute: <path d="M5 9v6h3l5 4V5L8 9H5zM16 9l5 6M21 9l-5 6" {...p} />,
+      plus: <path d="M12 6v12M6 12h12" {...p} />,
+      clock: <path d="M12 3a9 9 0 100 18 9 9 0 000-18zM12 7.5V12l3 2" {...p} />,
+      heart: <path d="M12 20s-7-4.4-7-9.2A3.8 3.8 0 0112 7a3.8 3.8 0 017 3.8C19 15.6 12 20 12 20z" {...p} />,
+      insta: <path d="M4 8a4 4 0 014-4h8a4 4 0 014 4v8a4 4 0 01-4 4H8a4 4 0 01-4-4V8zM12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zM17 6.8h.01" {...p} />,
+      tiktok: <path d="M14 4c.4 2.4 2 4 4.5 4.2V11C16.8 11 15.4 10.4 14 9.3V15a4.8 4.8 0 11-4.8-4.8c.3 0 .6 0 .8.1v2.8a2 2 0 101.4 1.9V4H14z" {...p} />,
+      mail: <path d="M3.5 6.5h17v11h-17zM4 7l8 6 8-6" {...p} />,
+      image: <path d="M4 5h16v14H4zM4 16l4.5-4.5 4 4L16 12l4 4M9 9.5a1.2 1.2 0 100 .01" {...p} />
+    };
+    return (
+      <svg viewBox="0 0 24 24" className={className} width="1em" height="1em" aria-hidden="true">
+        {paths[name] || null}
+      </svg>
+    );
+  }
+
+  function Star({ className }) {
+    return (
+      <svg viewBox="0 0 24 24" className={className} width="1em" height="1em" aria-hidden="true">
+        <path d="M12 3.2l2.5 5.1 5.6.8-4.1 4 1 5.6L12 16.1 6.9 18.7l1-5.6-4.1-4 5.6-.8L12 3.2z" fill="currentColor" />
+      </svg>
+    );
+  }
+
+  function GradientButton({ children, onClick, size = 'md', className = '', as = 'button', ...rest }) {
+    const sizes = { sm: 'text-[14.5px] px-5 py-2.5', md: 'text-[15.5px] px-7 py-3.5', lg: 'text-[17px] px-9 py-[18px]' };
+    const cls = `grad-cta inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-[0.01em] text-white ${sizes[size]} ${className}`;
+    if (as === 'a') return <a className={cls} onClick={onClick} {...rest}>{children}</a>;
+    return <button className={cls} onClick={onClick} {...rest}>{children}</button>;
+  }
+
+  function Reveal({ children, delay = 0, as: Tag = 'div', className = '', ...rest }) {
+    const ref = useRef(null);
+    useEffect(() => {
+      const el = ref.current;
+      if (!el) return;
+      el.classList.add('reveal-armed');
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) { el.classList.add('is-in'); io.unobserve(el); } });
+      }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
+      io.observe(el);
+      const fallback = setTimeout(() => { el.classList.add('is-in'); io.disconnect(); }, 1800);
+      return () => { io.disconnect(); clearTimeout(fallback); };
+    }, []);
+    return <Tag ref={ref} className={`reveal ${className}`} style={{ transitionDelay: `${delay}ms` }} {...rest}>{children}</Tag>;
+  }
+
+  function Section({ id, className = '', children, container = true }) {
+    return (
+      <section id={id} className={`px-5 sm:px-8 ${className}`}>
+        {container ? <div className="mx-auto w-full max-w-content">{children}</div> : children}
+      </section>
+    );
+  }
+
+  function Eyebrow({ children, className = '' }) {
+    return (
+      <div className={`inline-flex items-center ${className}`}>
+        <span className="text-[11px] font-medium tracking-[0.3em] uppercase text-ink/45">{children}</span>
+      </div>
+    );
+  }
+
+  function Placeholder({ label = 'foto', ratio = '3 / 4', className = '', icon = 'image', rounded = 'rounded-[28px]' }) {
+    return (
+      <div className={`relative overflow-hidden ${rounded} border border-dashed border-rose/40 bg-white/40 ${className}`} style={{ aspectRatio: ratio }}>
+        <div className="absolute inset-0 opacity-[0.5]" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(138,90,61,0.10) 0 1px, transparent 1px 11px)' }}></div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-rose/70">
+          <Icon name={icon} className="text-[26px]" />
+          <span className="font-mono text-[11px] tracking-wide text-ink/45">{label}</span>
+        </div>
+      </div>
+    );
+  }
+
+  function Figure({ src, alt = '', ratio = '3 / 4', className = '', placeholder = 'foto', icon = 'image', rounded = 'rounded-[28px]', overlay = null, objectPos = 'center' }) {
+    const [ok, setOk] = useState(!!src);
+    if (!src || !ok) return <Placeholder label={placeholder} ratio={ratio} className={className} icon={icon} rounded={rounded} />;
+    return (
+      <div className={`relative overflow-hidden ${rounded} ${className}`} style={{ aspectRatio: ratio }}>
+        <img src={src} alt={alt} loading="lazy" onError={() => setOk(false)} className="h-full w-full object-cover" style={{ objectPosition: objectPos }} />
+        {overlay}
+      </div>
+    );
+  }
+
+  /* ===================== NAVBAR ===================== */
+  function Navbar() {
+    const [solid, setSolid] = useState(false);
+    useEffect(() => {
+      const onScroll = () => setSolid(window.scrollY > 24);
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      return () => window.removeEventListener('scroll', onScroll);
+    }, []);
+    const links = [['El método', 'metodo'], ['Sobre Alejandra', 'sobre'], ['Testimonios', 'testimonios'], ['Preguntas', 'faq']];
+    return (
+      <header className={`sticky top-0 z-50 transition-all duration-500 ${solid ? 'bg-cream/80 backdrop-blur-xl border-b border-line/70' : 'bg-transparent border-b border-transparent'}`}>
+        <div className="mx-auto flex h-[68px] max-w-content items-center justify-between px-5 sm:px-8">
+          <a href="#top" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="font-display text-[21px] font-medium tracking-tight text-ink">Alejandra Galeano</a>
+          <nav className="hidden items-center gap-8 md:flex">
+            {links.map(([label, id]) => (
+              <button key={id} onClick={() => scrollToId(id)} className="text-[14.5px] text-ink/65 transition-colors hover:text-ink">{label}</button>
+            ))}
+          </nav>
+          <GradientButton size="sm" onClick={goOffer} className="shadow-none sm:shadow">Reservar mi cupo</GradientButton>
+        </div>
+      </header>
+    );
+  }
+
+  /* ===================== HERO ===================== */
+  const HERO_MEDIA = [
+    { type: 'video', src: A.ugc1,  poster: A.pUgc1,  label: 'clip soft glam' },
+    { type: 'video', src: A.promo, poster: A.pPromo, label: 'clip clase' },
+    { type: 'video', src: A.ugc2,  poster: A.pUgc2,  label: 'clip alumna' }
+  ];
+
+  function MarqueeClip({ item }) {
+    const ref = useRef(null);
+    useEffect(() => {
+      const v = ref.current;
+      if (!v) return;
+      const tryPlay = () => v.play().catch(() => {});
+      tryPlay();
+      const onFirstTouch = () => { tryPlay(); document.removeEventListener('click', onFirstTouch); document.removeEventListener('touchstart', onFirstTouch); };
+      document.addEventListener('click', onFirstTouch, { passive: true });
+      document.addEventListener('touchstart', onFirstTouch, { passive: true });
+      return () => { document.removeEventListener('click', onFirstTouch); document.removeEventListener('touchstart', onFirstTouch); };
+    }, []);
+    return (
+      <div className="relative overflow-hidden rounded-[18px] bg-ink/10 ring-1 ring-line/70" style={{ aspectRatio: '9 / 16' }}>
+        <video ref={ref} src={item.src} poster={item.poster} muted loop playsInline autoPlay preload="metadata" className="h-full w-full object-cover" aria-label={item.label} />
+      </div>
+    );
+  }
+
+  function VerticalMarquee() {
+    const items = [...HERO_MEDIA, ...HERO_MEDIA];
+    return (
+      <div className="marquee-pause relative h-full overflow-hidden rounded-[26px] ring-1 ring-line/60">
+        <div className="marquee-track absolute inset-x-0 top-0 flex flex-col gap-3.5">
+          {items.map((it, i) => (<div key={i} className="shrink-0"><MarqueeClip item={it} /></div>))}
+        </div>
+      </div>
+    );
+  }
+
+  const HERO_FACTS = [
+    ['mirror', 'En vivo + grabación', 'la ves cuando quieras'],
+    ['face',   'Pensada desde cero',  'sin experiencia previa'],
+    ['drop',   'Para todos los tonos','adaptable a tu piel'],
+    ['brush',  'Lista de productos',  'incluida en PDF']
+  ];
+
+  function Hero() {
+    return (
+      <Section id="top" className="relative pt-7 pb-12 sm:pt-10 sm:pb-16">
+        <div className="pointer-events-none absolute -top-10 right-[8%] -z-10 h-72 w-72 glow" style={{ background: '#D8B58A' }}></div>
+        <div className="pointer-events-none absolute top-40 -left-10 -z-10 h-72 w-72 glow" style={{ background: '#C9BBA7' }}></div>
+
+        <div className="msg-hero grid grid-cols-1 items-center gap-9 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10">
+          <div className="order-2 flex min-w-0 flex-col justify-center lg:order-1">
+            <Reveal>
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-line bg-white/70 px-4 py-2 backdrop-blur">
+                <span className="flex items-center gap-0.5 text-rose"><Star className="text-[13px]" /><Star className="text-[13px]" /><Star className="text-[13px]" /><Star className="text-[13px]" /><Star className="text-[13px]" /></span>
+                <span className="text-[13.5px] text-ink/70"><b className="font-semibold text-ink">4.9</b> · +10.000 alumnas ya aprendieron</span>
+              </div>
+            </Reveal>
+            <Reveal delay={80}>
+              <h1 className="font-display headline mt-5 text-[32px] font-normal text-ink sm:text-[40px] md:text-[42px] lg:text-[44px] xl:text-[52px]">
+                Domina el <span className="grad-text italic">soft glam</span> y maquíllate como una profesional en un solo día.
+              </h1>
+            </Reveal>
+            <Reveal delay={150}>
+              <p className="mt-5 max-w-xl text-[16.5px] leading-relaxed text-ink/65">
+                La técnica de maquillaje natural, luminoso y elegante que toda mujer quiere dominar. Paso a paso, en vivo, con Alejandra Galeano.
+              </p>
+            </Reveal>
+            <Reveal delay={210}>
+              <div className="mt-6 flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 self-start rounded-2xl bg-ink/[0.04] px-4 py-2 text-[13.5px] text-ink/75">
+                <span className="relative flex h-2 w-2 shrink-0">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-rose opacity-70"></span>
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-rose"></span>
+                </span>
+                <span className="whitespace-nowrap">Clase en vivo</span>
+                <span className="opacity-50">·</span>
+                <b className="whitespace-nowrap font-semibold text-ink">sábado 21 de junio</b>
+                <span className="opacity-50">·</span>
+                <span className="whitespace-nowrap">cupos limitados</span>
+              </div>
+            </Reveal>
+            <Reveal delay={270}>
+              <div className="mt-7 flex flex-wrap items-center gap-4">
+                <GradientButton size="lg" onClick={goOffer}>Quiero mi cupo <Icon name="arrow" className="text-[18px]" /></GradientButton>
+                <button onClick={() => scrollToId('testimonios')} className="text-[15px] text-ink/60 underline-offset-4 transition-colors hover:text-ink hover:underline">Ver resultados de alumnas</button>
+              </div>
+            </Reveal>
+            <Reveal delay={330}>
+              <div className="mt-7 flex items-center gap-3 text-[13.5px] text-ink/55">
+                <div className="flex -space-x-3">
+                  {[A.pUgc1, A.pUgc2, A.pPromo].map((src, i) => (
+                    <span key={i} className="h-9 w-9 overflow-hidden rounded-full ring-2 ring-cream">
+                      <img src={src} alt="" className="h-full w-full object-cover" loading="lazy" />
+                    </span>
+                  ))}
+                </div>
+                Mujeres reales aprendiendo a maquillarse solas, para siempre.
+              </div>
+            </Reveal>
+          </div>
+
+          <div className="order-1 lg:order-2 lg:flex lg:justify-end">
+            <Reveal delay={120} className="w-full lg:w-auto">
+              <div className="mx-auto grid h-full w-full max-w-[540px] grid-cols-[1.4fr_1fr] gap-3 sm:gap-3.5 lg:mx-0 lg:h-[540px] lg:w-[500px] xl:h-[600px] xl:w-[560px]" style={{ minHeight: 'min(80vw, 480px)' }}>
+                <div className="relative h-full overflow-hidden rounded-[28px] ring-1 ring-line/60 shadow-[0_30px_70px_-30px_rgba(43,32,25,0.35)]">
+                  <img src={A.aleHero} alt="Alejandra Galeano en su estudio" loading="lazy" className="h-full w-full object-cover object-top" />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-ink/35 to-transparent"></div>
+                  <div className="floaty absolute bottom-4 left-4 right-4 flex items-center gap-2.5 rounded-2xl border border-white/40 bg-white/85 px-3.5 py-2.5 shadow-xl backdrop-blur">
+                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-gradA to-gradB text-white"><Icon name="spark" className="text-[17px]" /></span>
+                    <div className="leading-tight">
+                      <div className="text-[13px] font-semibold text-ink">Acabado luminoso</div>
+                      <div className="text-[11.5px] text-ink/55">que dura todo el día</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="h-full"><VerticalMarquee /></div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+
+        <Reveal delay={120}>
+          <div className="msg-grid-4 mt-9 grid grid-cols-2 gap-px overflow-hidden rounded-[20px] border border-line bg-line/60 sm:grid-cols-4">
+            {HERO_FACTS.map(([ic, t, sub], i) => (
+              <div key={i} className="flex items-center gap-3 bg-cream px-5 py-5">
+                <span className="shrink-0 text-rose/80"><Icon name={ic} className="text-[21px]" stroke={1.25} /></span>
+                <div className="leading-tight">
+                  <div className="text-[13.5px] font-medium text-ink">{t}</div>
+                  <div className="mt-0.5 text-[12px] text-ink/50">{sub}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </Section>
+    );
+  }
+
+  /* ===================== PROBLEMA ===================== */
+  const PROBLEMS = [
+    { icon: 'wallet', text: 'Cada evento importante terminas pagando un maquillador… otra vez.' },
+    { icon: 'face',   text: 'Intentas maquillarte tú misma y nunca queda como en tu cabeza: base cargada, cejas que no salen, rubor de más.' },
+    { icon: 'eye',    text: 'Sigues tutoriales que asumen que ya sabes lo básico y te dejan más confundida.' },
+    { icon: 'spark',  text: 'Quieres ese look soft glam, natural y luminoso… pero nadie te ha explicado cómo lograrlo de verdad.' }
+  ];
+
+  function Problema() {
+    return (
+      <Section id="problema" className="py-16 sm:py-24">
+        <Reveal className="max-w-2xl">
+          <Eyebrow>El día a día</Eyebrow>
+          <h2 className="font-display headline mt-5 text-[32px] font-normal text-ink sm:text-[42px]">¿Te suena familiar?</h2>
+        </Reveal>
+        <div className="msg-grid-2 mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {PROBLEMS.map((it, i) => (
+            <Reveal key={i} delay={i * 70} className="min-w-0">
+              <div className="group flex h-full min-w-0 items-start gap-4 rounded-[22px] border border-line/80 bg-white/40 p-6 transition-colors hover:bg-white/70 sm:gap-5 sm:p-7">
+                <span className="mt-0.5 shrink-0 text-rose/80"><Icon name={it.icon} className="text-[22px] sm:text-[24px]" stroke={1.25} /></span>
+                <p className="min-w-0 flex-1 break-words text-[15px] leading-relaxed text-ink/75 sm:text-[16px]">{it.text}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+    );
+  }
+
+  /* ===================== AGITACIÓN ===================== */
+  function Agitacion() {
+    return (
+      <Section className="py-6 sm:py-10">
+        <Reveal className="mx-auto max-w-3xl text-center">
+          <span className="font-display text-[40px] leading-none text-rose/50">"</span>
+          <p className="font-display headline -mt-3 text-[27px] font-light italic text-ink/85 sm:text-[34px]">
+            Y mientras tanto, cada salida, cada foto, cada evento se vuelve estrés en vez de disfrute.
+          </p>
+          <p className="mx-auto mt-6 max-w-xl text-[16.5px] leading-relaxed text-ink/60">
+            El problema no son tus productos. Es que nadie te enseñó una técnica clara y completa.
+          </p>
+        </Reveal>
+      </Section>
+    );
+  }
+
+  /* ===================== SOLUCIÓN ===================== */
+  const BENEFITS = [
+    { icon: 'brush',  title: 'Técnica completa, no trucos sueltos', text: 'Aprendes el método de principio a fin, no consejos aislados que no sabes cómo conectar.' },
+    { icon: 'drop',   title: 'Acabado natural y luminoso',          text: 'El verdadero soft glam: piel que se ve piel, glow estratégico y duración de todo el día.' },
+    { icon: 'mirror', title: 'Hazlo tú misma, para siempre',        text: 'Para cualquier ocasión, sin depender de nadie ni volver a pagar por cada evento.' }
+  ];
+
+  function Solucion() {
+    return (
+      <Section className="py-16 sm:py-24">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <Eyebrow className="justify-center">La solución</Eyebrow>
+          <h2 className="font-display headline mt-5 text-[32px] font-normal text-ink sm:text-[44px]">
+            Por eso existe esta <span className="grad-text italic">masterclass.</span>
+          </h2>
+        </Reveal>
+        <div className="msg-grid-3 mt-16 grid grid-cols-1 gap-5 md:grid-cols-3">
+          {BENEFITS.map((b, i) => (
+            <Reveal key={i} delay={i * 90} className="min-w-0">
+              <div className="flex h-full min-w-0 flex-col rounded-[24px] border border-line/80 bg-white/40 p-7 transition-colors hover:bg-white/70 sm:p-8">
+                <span className="text-rose/80"><Icon name={b.icon} className="text-[26px]" stroke={1.25} /></span>
+                <h3 className="font-display mt-6 text-[20px] font-normal text-ink sm:text-[21px]">{b.title}</h3>
+                <p className="mt-3 break-words text-[15px] leading-relaxed text-ink/60">{b.text}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+    );
+  }
+
+  /* ===================== APRENDER (banda espresso) ===================== */
+  const STEPS = [
+    { icon: 'drop',  title: 'Preparación de piel',         sub: 'Para que el maquillaje dure intacto.' },
+    { icon: 'face',  title: 'Base luminosa',               sub: 'Cobertura natural, sin efecto máscara.' },
+    { icon: 'brush', title: 'Corrección y contorno suave', sub: 'Define sin que se note el producto.' },
+    { icon: 'pen',   title: 'Cejas naturales y definidas', sub: 'Forma equilibrada, pelo a pelo.' },
+    { icon: 'eye',   title: 'Ojos soft glam',              sub: 'Difuminado y transición sin cortes.' },
+    { icon: 'spark', title: 'Rubor y glow estratégico',    sub: 'Frescura y luz en los puntos correctos.' },
+    { icon: 'lips',  title: 'Labios que combinan',         sub: 'El tono que cierra y unifica el look.' },
+    { icon: 'crown', title: 'Fijación profesional',        sub: 'Para que aguante todo el día y la noche.' }
+  ];
+
+  function Aprender() {
+    return (
+      <section id="metodo" className="px-5 sm:px-8">
+        <Reveal className="relative mx-auto mt-2 w-full max-w-content overflow-hidden rounded-[36px] bg-ink px-6 py-16 sm:px-12 sm:py-20">
+          <div className="relative mx-auto max-w-2xl">
+            <div className="inline-flex items-center"><span className="text-[11px] font-medium tracking-[0.3em] uppercase text-peach">El temario</span></div>
+            <h2 className="font-display headline mt-5 text-[32px] font-normal text-cream sm:text-[44px]">El método soft glam, paso a paso.</h2>
+            <p className="mt-5 text-[16.5px] leading-relaxed text-cream/65">
+              Ocho módulos en vivo que cubren el rostro completo, en el orden exacto en que un profesional lo trabaja, así sabes justo qué vas a aprender y en qué momento.
+            </p>
+          </div>
+          <div className="msg-grid-4 relative mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-[24px] bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
+            {STEPS.map((s, i) => (
+              <div key={i} className="group relative flex h-full flex-col bg-ink p-7 transition-colors duration-300 hover:bg-white/[0.04]">
+                <div className="flex items-center justify-between">
+                  <span className="font-display text-[22px] leading-none text-peach">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="text-peach/85"><Icon name={s.icon} className="text-[23px]" stroke={1.25} /></span>
+                </div>
+                <span className="mt-5 h-px w-full bg-cream/10"></span>
+                <h3 className="font-display mt-5 text-[18px] font-normal leading-snug text-cream">{s.title}</h3>
+                <p className="mt-2 text-[13.5px] leading-relaxed text-cream/55">{s.sub}</p>
+              </div>
+            ))}
+          </div>
+          <div className="relative mt-10 flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-center">
+            <p className="text-[15px] text-cream/60">Todo en una sola sesión en vivo, guiada paso a paso.</p>
+            <GradientButton size="sm" onClick={goOffer}>Quiero aprender el método <Icon name="arrow" className="text-[17px]" /></GradientButton>
+          </div>
+        </Reveal>
+      </section>
+    );
+  }
+
+  /* ===================== SOBRE ALEJANDRA ===================== */
+  function SobreAlejandra() {
+    const stats = [['+5.000', 'alumnas formadas'], ['+8', 'años de experiencia'], ['+20.000', 'rostros maquillados']];
+    return (
+      <Section id="sobre" className="py-16 sm:py-24">
+        <div className="grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+          <Reveal>
+            <div className="relative">
+              <Figure src={A.alePro} alt="Retrato profesional de Alejandra Galeano" ratio="2 / 3" placeholder="foto profesional · Alejandra" icon="face" objectPos="center top" rounded="rounded-[32px]" className="ring-1 ring-line/60 shadow-[0_30px_70px_-34px_rgba(43,32,25,0.4)]" />
+              <div className="absolute -right-3 -top-4 rounded-2xl border border-line bg-white/85 px-4 py-3 shadow-xl backdrop-blur sm:-right-6">
+                <div className="font-display text-[22px] leading-none text-ink">4.9<span className="text-rose">★</span></div>
+                <div className="mt-1 text-[11.5px] text-ink/55">valoración alumnas</div>
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={120}>
+            <Eyebrow>Sobre Alejandra</Eyebrow>
+            <h2 className="font-display headline mt-5 text-[30px] font-normal text-ink sm:text-[40px]">Maquillaje que se siente tuyo, enseñado con cercanía.</h2>
+            <p className="mt-6 text-[17px] leading-relaxed text-ink/70">
+              Alejandra Galeano es maquilladora profesional con <span className="text-ink/90">[X] años de experiencia</span>, especializada en looks naturales y luminosos. Ha trabajado en <span className="text-ink/90">[eventos, novias y producciones]</span> y ha acompañado a cientos de mujeres a maquillarse por sí mismas con confianza.
+            </p>
+            <p className="mt-4 text-[16px] leading-relaxed text-ink/60">Su forma de enseñar es cercana, sin tecnicismos y pensada para que entiendas el porqué de cada paso, no solo el cómo.</p>
+            <div className="mt-9 grid grid-cols-3 gap-4 border-t border-line pt-7">
+              {stats.map(([n, l], i) => (
+                <div key={i}>
+                  <div className="font-display text-[30px] font-normal text-ink sm:text-[36px]">{n}</div>
+                  <div className="mt-1 text-[13px] leading-snug text-ink/55">{l}</div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </Section>
+    );
+  }
+
+  /* ===================== VIDEO PLAYER (UGC) ===================== */
+  function VideoPlayer({ src, poster, label }) {
+    const ref = useRef(null);
+    const [muted, setMuted] = useState(true);
+    const [hover, setHover] = useState(false);
+    const [failed, setFailed] = useState(false);
+    useEffect(() => {
+      const v = ref.current;
+      if (!v) return;
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting && e.intersectionRatio >= 0.5) v.play().catch(() => {}); else v.pause(); });
+      }, { threshold: [0, 0.5, 1] });
+      io.observe(v);
+      return () => io.disconnect();
+    }, []);
+    if (failed) return <Placeholder label={label} ratio="9 / 16" icon="play" rounded="rounded-[26px]" />;
+    const toggleSound = () => { const v = ref.current; if (!v) return; v.muted = !v.muted; if (!v.muted) v.play().catch(() => {}); setMuted(v.muted); };
+    return (
+      <div className="group relative overflow-hidden rounded-[26px] ring-1 ring-line/60 shadow-[0_24px_55px_-32px_rgba(28,22,20,0.5)]" style={{ aspectRatio: '9 / 16' }} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+        <video ref={ref} src={src} poster={poster} muted loop playsInline preload="metadata" onError={() => setFailed(true)} onClick={toggleSound} className="h-full w-full cursor-pointer object-cover" />
+        <div className={`pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/45 to-transparent transition-opacity duration-300 ${hover || !muted ? 'opacity-100' : 'opacity-60'}`}></div>
+        <button onClick={toggleSound} aria-label={muted ? 'Activar sonido' : 'Silenciar'} className={`absolute bottom-3.5 right-3.5 grid h-10 w-10 place-items-center rounded-full bg-white/85 text-ink backdrop-blur transition-all duration-300 hover:bg-white ${hover || !muted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+          <Icon name={muted ? 'mute' : 'sound'} className="text-[18px]" />
+        </button>
+        <div className={`absolute left-3.5 top-3.5 rounded-full bg-white/80 px-3 py-1 text-[11px] font-medium text-ink/70 backdrop-blur transition-opacity duration-300 ${muted ? 'opacity-100' : 'opacity-0'}`}>toca para escuchar</div>
+      </div>
+    );
+  }
+
+  const UGC = [
+    { src: A.ugc1,  poster: A.pUgc1,  label: 'video alumna', quote: 'Por primera vez me maquillé sola para un matrimonio y no paré de recibir cumplidos. La técnica de base lo cambió todo.', name: 'Daniela R.',   city: 'Medellín' },
+    { src: A.ugc2,  poster: A.pUgc2,  label: 'video alumna', quote: 'Pensé que el difuminado de ojos no era para mí. Con el paso a paso de Aleja por fin me queda parejo.', name: 'Carolina M.',  city: 'Bogotá' },
+    { src: A.promo, poster: A.pPromo, label: 'video alumna', quote: 'Dejé de gastar en maquillador para cada evento. Ahora lo disfruto yo misma en casa, tranquila.', name: 'Valentina G.', city: 'Cali' }
+  ];
+
+  function Testimonios() {
+    return (
+      <Section id="testimonios" className="py-16 sm:py-24">
+        <Reveal className="max-w-2xl">
+          <Eyebrow>Resultados reales</Eyebrow>
+          <h2 className="font-display headline mt-5 text-[32px] font-normal text-ink sm:text-[44px]">Lo que dicen quienes ya aprendieron.</h2>
+        </Reveal>
+        <div className="msg-grid-3 mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {UGC.map((t, i) => (
+            <Reveal key={i} delay={i * 100} className="min-w-0">
+              <div className="flex h-full min-w-0 flex-col gap-5">
+                <VideoPlayer src={t.src} poster={t.poster} label={t.label} />
+                <div className="rounded-[22px] border border-line bg-white/60 p-6">
+                  <span className="font-display text-[26px] leading-none text-rose/45">"</span>
+                  <p className="-mt-2 text-[15.5px] leading-relaxed text-ink/75">{t.quote}</p>
+                  <div className="mt-4 flex items-center gap-2 text-[13.5px]">
+                    <span className="font-semibold text-ink">{t.name}</span><span className="text-ink/40">·</span><span className="text-ink/55">{t.city}</span>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+    );
+  }
+
+  /* ===================== RESEÑAS (doble fila marquee) ===================== */
+  const REVIEWS = [
+    { text: 'Llevaba años pagando maquillador para cada evento. Hoy me maquillo sola y me siento más segura que nunca. La mejor inversión que he hecho por mí.', name: 'Laura Restrepo',  city: 'Medellín',     initial: 'L' },
+    { text: 'Aleja explica con una paciencia increíble. Entendí por fin por qué mi base se cuarteaba y ahora me dura impecable todo el día.',                       name: 'Mónica Salazar',  city: 'Bogotá',       initial: 'M' },
+    { text: 'Pensé que el difuminado de ojos era imposible para mí. Con su método paso a paso me quedó parejo desde el primer intento. ¡Mil gracias!',              name: 'Tatiana Gómez',   city: 'Cali',         initial: 'T' },
+    { text: 'La clase vale muchísimo más de lo que cuesta. Quedó grabada y la he repasado tres veces. Cada vez aprendo algo nuevo.',                                name: 'Daniela Ríos',    city: 'Barranquilla', initial: 'D' },
+    { text: 'Me maquillé para el matrimonio de mi hermana y todas me preguntaron quién me había maquillado. Era yo. No lo podía creer.',                            name: 'Carolina Vélez',  city: 'Pereira',      initial: 'C' },
+    { text: 'La lista de productos que comparte es oro puro. Dejé de gastar en cosas que no necesitaba y mi piel se ve mucho mejor.',                                name: 'Andrea Lozano',   city: 'Bucaramanga',  initial: 'A' },
+    { text: 'Soft glam natural y luminoso, justo lo que buscaba. Nada cargado. Mi esposo me dijo que me veía "igual pero mejor", jaja.',                            name: 'Valentina Mejía', city: 'Manizales',    initial: 'V' },
+    { text: 'Soy mayor y pensé que esto no era para mí. Aleja adaptó todo a mi tipo de piel y quedé feliz. Cercana y profesional.',                                  name: 'Gloria Patiño',   city: 'Cartagena',    initial: 'G' },
+    { text: 'Resolvió todas mis dudas en vivo. Salí de la clase sabiendo exactamente qué hacer. 100% recomendada.',                                                  name: 'Sara Hoyos',      city: 'Envigado',     initial: 'S' }
+  ];
+
+  function ReviewStars() {
+    return <span className="flex items-center gap-0.5 text-rose">{[0, 1, 2, 3, 4].map((i) => <Star key={i} className="text-[14px]" />)}</span>;
+  }
+
+  function ResenasMarquee() {
+    const rowA = REVIEWS.slice(0, 5);
+    const rowB = REVIEWS.slice(4).concat(REVIEWS.slice(0, 1));
+    const Card = ({ r }) => (
+      <figure className="w-[300px] shrink-0 rounded-[24px] border border-line/80 bg-white/50 p-7 transition-colors hover:bg-white/80 sm:w-[360px]">
+        <ReviewStars />
+        <blockquote className="mt-4 text-[15px] leading-relaxed text-ink/75">{r.text}</blockquote>
+        <figcaption className="mt-5 flex items-center gap-3">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-gradA to-gradB font-display text-[16px] text-white">{r.initial}</span>
+          <span className="leading-tight">
+            <span className="block text-[14px] font-semibold text-ink">{r.name}</span>
+            <span className="block text-[12.5px] text-ink/55">{r.city}</span>
+          </span>
+        </figcaption>
+      </figure>
+    );
+    const Row = ({ items, reverse }) => (
+      <div className="row-mask row-pause overflow-hidden">
+        <div className="row-track flex w-max gap-5" style={reverse ? { animationDirection: 'reverse' } : null}>
+          {[...items, ...items].map((r, i) => <Card key={i} r={r} />)}
+        </div>
+      </div>
+    );
+    return (
+      <section id="clases" className="py-16 sm:py-24">
+        <Reveal className="mx-auto w-full max-w-content px-5 sm:px-8">
+          <Eyebrow>Reseñas</Eyebrow>
+          <h2 className="font-display headline mt-5 max-w-2xl text-[32px] font-normal text-ink sm:text-[44px]">Cientos de mujeres ya lo lograron.</h2>
+          <p className="mt-5 max-w-2xl text-[16.5px] leading-relaxed text-ink/60">Esto es lo que cuentan las alumnas que ya tomaron la masterclass y hoy se maquillan solas. Pasa el cursor para detener el desplazamiento y leer con calma.</p>
+        </Reveal>
+        <Reveal delay={100} className="mt-12 flex flex-col gap-5">
+          <Row items={rowA} reverse={false} />
+          <Row items={rowB} reverse={true} />
+        </Reveal>
+      </section>
+    );
+  }
+
+  /* ===================== OFERTA + COUNTDOWN ===================== */
+  function useCountdown(target) {
+    const [t, setT] = useState(() => Math.max(0, target - Date.now()));
+    useEffect(() => {
+      const id = setInterval(() => setT(Math.max(0, target - Date.now())), 1000);
+      return () => clearInterval(id);
+    }, [target]);
+    const s = Math.floor(t / 1000);
+    return { d: Math.floor(s / 86400), h: Math.floor((s % 86400) / 3600), m: Math.floor((s % 3600) / 60), s: s % 60 };
+  }
+
+  function Countdown({ target }) {
+    const { d, h, m, s } = useCountdown(target);
+    const units = [[d, 'días'], [h, 'horas'], [m, 'min'], [s, 'seg']];
+    return (
+      <div className="flex items-stretch justify-center gap-2.5 sm:gap-3">
+        {units.map(([v, l], i) => (
+          <div key={i} className="min-w-[68px] rounded-2xl border border-silver/45 bg-white/70 px-3 py-3 text-center backdrop-blur sm:min-w-[78px]">
+            <div className="font-display text-[30px] font-medium leading-none text-ink tabular-nums sm:text-[36px]">{String(v).padStart(2, '0')}</div>
+            <div className="mt-1.5 text-[11px] uppercase tracking-[0.14em] text-ink/50">{l}</div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  const INCLUDES = [
+    ['mirror', 'Clase magistral en vivo',     'Todo el método soft glam, paso a paso y en tiempo real.'],
+    ['play',   'Grabación completa (replay)', 'Acceso para verla cuando quieras, las veces que necesites.'],
+    ['drop',   'Lista de productos (PDF)',    'Los recomendados de Alejandra para cada paso del look.'],
+    ['heart',  'Sesión de preguntas en vivo', 'Resuelves tus dudas reales durante la clase.'],
+    ['spark',  'Bono: guía de tonos por piel','Cómo adaptar el soft glam a tu subtono exacto.']
+  ];
+
+  function Oferta() {
+    const target = new Date('2026-06-21T16:00:00-05:00').getTime();
+    return (
+      <Section id="oferta" className="py-20 sm:py-28" container={false}>
+        <div className="mx-auto max-w-content px-5 sm:px-8">
+          <Reveal>
+            <div className="relative overflow-hidden rounded-[36px] border border-line bg-white/60 px-6 py-12 backdrop-blur sm:px-12 sm:py-16">
+              <div className="pointer-events-none absolute -top-16 left-1/2 h-64 w-64 -translate-x-1/2 glow" style={{ background: '#D8B58A' }}></div>
+              <div className="pointer-events-none absolute -bottom-20 -right-10 h-64 w-64 glow" style={{ background: '#C9BBA7' }}></div>
+              <div className="relative mx-auto max-w-2xl text-center">
+                <Eyebrow className="justify-center">La oferta</Eyebrow>
+                <h2 className="font-display headline mt-5 text-[33px] font-normal text-ink sm:text-[46px]">Todo esto, hoy, por <span className="grad-text">$60.000 COP</span></h2>
+                <p className="mt-3 text-[16px] text-ink/55">aproximadamente $15 USD · pago único</p>
+              </div>
+              <div className="msg-grid-2 relative mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2">
+                {INCLUDES.map(([icon, t, sub], i) => (
+                  <div key={i} className="flex items-start gap-3.5 rounded-2xl border border-line bg-white/70 p-4">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-rose/10 text-rose"><Icon name={icon} className="text-[18px]" /></span>
+                    <div><div className="text-[15px] font-semibold text-ink">{t}</div><div className="mt-0.5 text-[13.5px] leading-snug text-ink/55">{sub}</div></div>
+                  </div>
+                ))}
+              </div>
+              <div className="relative mx-auto mt-8 max-w-xl rounded-2xl bg-ink/[0.04] px-6 py-5 text-center">
+                <p className="text-[15.5px] leading-relaxed text-ink/70">Una sola sesión de maquillaje para un evento cuesta más que esto, y esto te sirve <span className="font-semibold text-ink">toda la vida.</span></p>
+              </div>
+              <div className="relative mt-10 text-center">
+                <div className="mb-4 inline-flex items-center gap-2 text-[13.5px] text-ink/60"><Icon name="clock" className="text-[16px] text-rose" /> La clase empieza en</div>
+                <Countdown target={target} />
+                <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-rose/10 px-4 py-1.5 text-[13px] font-medium text-rose"><span className="h-1.5 w-1.5 rounded-full bg-rose"></span> Cupos limitados</div>
+              </div>
+              <div className="relative mt-9 flex flex-col items-center">
+                <GradientButton size="lg" onClick={goOffer} className="w-full max-w-sm">Reservar mi cupo <Icon name="arrow" className="text-[18px]" /></GradientButton>
+                <p className="mt-4 text-[13px] text-ink/45">Pago seguro · Acceso inmediato por correo</p>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </Section>
+    );
+  }
+
+  /* ===================== FAQ ===================== */
+  const FAQS = [
+    ['¿Necesito experiencia previa?',   'Para nada. La clase está pensada desde cero: empezamos por lo básico y avanzamos paso a paso.'],
+    ['¿Qué productos necesito?',        'Te enviamos la lista de productos recomendados antes de la clase, con opciones para distintos presupuestos.'],
+    ['¿Y si no puedo asistir en vivo?', 'Tienes acceso a la grabación completa para verla cuando quieras, las veces que necesites.'],
+    ['¿Sirve para mi tono de piel?',    'Sí. La técnica es adaptable a todos los tonos y subtonos, y te enseñamos cómo ajustarla al tuyo.'],
+    ['¿Cómo accedo a la clase?',        'Tras tu pago recibes el link de acceso por correo, junto con todos los materiales.']
+  ];
+
+  function FaqItem({ q, a, open, onToggle, id }) {
+    return (
+      <div className={`overflow-hidden rounded-[22px] border transition-colors ${open ? 'border-rose/40 bg-white' : 'border-line bg-white/55'}`}>
+        <button onClick={onToggle} aria-expanded={open} aria-controls={`faq-panel-${id}`} className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left">
+          <span className="font-display text-[18px] font-medium text-ink">{q}</span>
+          <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border border-line text-rose transition-transform duration-300 ${open ? 'rotate-45 bg-rose/10' : ''}`}><Icon name="plus" className="text-[16px]" /></span>
+        </button>
+        <div id={`faq-panel-${id}`} className={`faq-panel ${open ? 'open' : ''}`}><div><p className="px-6 pb-6 text-[15.5px] leading-relaxed text-ink/65">{a}</p></div></div>
+      </div>
+    );
+  }
+
+  function Faq() {
+    const [open, setOpen] = useState(0);
+    return (
+      <Section id="faq" className="py-16 sm:py-24">
+        <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+          <Reveal>
+            <Eyebrow>Preguntas frecuentes</Eyebrow>
+            <h2 className="font-display headline mt-5 text-[32px] font-normal text-ink sm:text-[42px]">Lo que quizá te estás preguntando.</h2>
+            <p className="mt-5 text-[16px] leading-relaxed text-ink/60">¿Tienes otra duda? Escríbenos y te respondemos antes de reservar.</p>
+          </Reveal>
+          <Reveal delay={100}>
+            <div className="flex flex-col gap-3">
+              {FAQS.map(([q, a], i) => (
+                <FaqItem key={i} id={i} q={q} a={a} open={open === i} onToggle={() => setOpen(open === i ? -1 : i)} />
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </Section>
+    );
+  }
+
+  /* ===================== FOOTER ===================== */
+  function Footer() {
+    return (
+      <footer className="bg-ink px-5 pt-16 pb-10 text-cream/80 sm:px-8">
+        <div className="mx-auto max-w-content">
+          <div className="flex flex-col gap-10 border-b border-white/10 pb-10 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-md">
+              <div className="font-display text-[26px] font-medium text-cream">Alejandra Galeano</div>
+              <p className="mt-4 text-[15px] leading-relaxed text-cream/55">Maquillaje soft glam, natural y luminoso. Aprende a maquillarte como una profesional, para siempre.</p>
+              <GradientButton size="md" onClick={goOffer} className="mt-6">Reservar mi cupo <Icon name="arrow" className="text-[18px]" /></GradientButton>
+            </div>
+            <div className="flex items-center gap-3">
+              {[['insta', 'Instagram'], ['tiktok', 'TikTok'], ['mail', 'Correo']].map(([ic, l]) => (
+                <a key={ic} href="#" aria-label={l} className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-cream/80 transition-colors hover:border-white/40 hover:text-cream"><Icon name={ic} className="text-[19px]" /></a>
+              ))}
+            </div>
+          </div>
+          <div className="flex flex-col gap-3 pt-7 text-[12.5px] text-cream/40 sm:flex-row sm:items-center sm:justify-between">
+            <p>© {new Date().getFullYear()} Alejandra Galeano · Todos los derechos reservados.</p>
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              <a href="#" className="transition-colors hover:text-cream/70">Términos y condiciones</a>
+              <a href="#" className="transition-colors hover:text-cream/70">Política de privacidad</a>
+            </div>
+          </div>
+          <p className="mt-6 max-w-3xl text-[11.5px] leading-relaxed text-cream/30">Los resultados varían según la práctica y los productos de cada persona. Esta masterclass es de carácter formativo y no garantiza resultados específicos.</p>
+        </div>
+      </footer>
+    );
+  }
+
+  /* ===================== APP ===================== */
+  function App() {
+    return (
+      <>
+        <Navbar />
+        <main>
+          <Hero />
+          <Problema />
+          <Agitacion />
+          <Solucion />
+          <Aprender />
+          <SobreAlejandra />
+          <Testimonios />
+          <ResenasMarquee />
+          <Oferta />
+          <Faq />
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  /* DEFENSA: espera a que Tailwind cargue antes de renderizar */
+  function msgBoot() {
+    if (typeof tailwind === 'undefined' || !document.styleSheets.length) {
+      return setTimeout(msgBoot, 60);
+    }
+    ReactDOM.createRoot(document.getElementById('msg-root')).render(<App />);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', msgBoot);
+  } else {
+    msgBoot();
+  }
+</script>
+{% endraw %}
+
+{% schema %}
+{
+  "name": "Masterclass Soft Glam",
+  "settings": [
+    {
+      "type": "url",
+      "id": "checkout_url",
+      "label": "URL del checkout (producto Shopify)",
+      "info": "A donde van los botones 'Reservar mi cupo'. Ej: /products/masterclass-soft-glam"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_theme_chrome",
+      "label": "Ocultar header y footer del tema",
+      "info": "La landing trae su propio navbar y footer. Recomendado activado.",
+      "default": true
+    }
+  ],
+  "presets": [
+    { "name": "Masterclass Soft Glam", "category": "Custom" }
+  ]
+}
+{% endschema %}

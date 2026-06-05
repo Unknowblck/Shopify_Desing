@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main": {
+      "type": "masterclass-soft-glam",
+      "settings": {
+        "hide_theme_chrome": true,
+        "checkout_url": "/products/masterclass-soft-glam"
+      }
+    }
+  },
+  "order": ["main"]
+}
