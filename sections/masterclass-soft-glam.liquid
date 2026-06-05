@@ -2,10 +2,10 @@
   Masterclass Soft Glam — Alejandra Galeano
   Section autocontenida v4 para el tema Savor.
   Pensada para usarse con templates/page.masterclass-soft-glam.json
-  VERSION: v7-savor (sin chip flotante "Acabado luminoso") — 2026-06-05
+  VERSION: v8-savor (reframe foto hero: object-position centro) — 2026-06-05
 {%- endcomment -%}
 
-<script>console.log('%c MSG Soft Glam v7-savor ', 'background:#8C5E40;color:#F3EBE1;padding:4px 8px;border-radius:4px;font-weight:bold');</script>
+<script>console.log('%c MSG Soft Glam v8-savor ', 'background:#8C5E40;color:#F3EBE1;padding:4px 8px;border-radius:4px;font-weight:bold');</script>
 
 {%- if section.settings.hide_theme_chrome -%}
 <style>
@@ -403,7 +403,7 @@
             <Reveal delay={120} className="w-full lg:w-auto">
               <div className="mx-auto grid h-full w-full max-w-[540px] grid-cols-[1.4fr_1fr] gap-3 sm:gap-3.5 lg:mx-0 lg:h-[540px] lg:w-[500px] xl:h-[600px] xl:w-[560px]" style={{ minHeight: 'min(80vw, 480px)' }}>
                 <div className="relative h-full overflow-hidden rounded-[28px] ring-1 ring-line/60 shadow-[0_30px_70px_-30px_rgba(43,32,25,0.35)]">
-                  <img src={A.aleHero} alt="Alejandra Galeano en su estudio" loading="lazy" className="h-full w-full object-cover object-top" />
+                  <img src={A.aleHero} alt="Alejandra Galeano en su estudio" loading="lazy" className="h-full w-full object-cover" style={{ objectPosition: 'center 25%' }} />
                 </div>
                 <div className="h-full"><VerticalMarquee /></div>
               </div>
