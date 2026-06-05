@@ -2,10 +2,10 @@
   Masterclass Soft Glam — Alejandra Galeano
   Section autocontenida v4 para el tema Savor.
   Pensada para usarse con templates/page.masterclass-soft-glam.json
-  VERSION: v4-savor (responsive + video 9:16 + safety guards) — 2026-06-05
+  VERSION: v5-savor (marquee speed + motion visibility) — 2026-06-05
 {%- endcomment -%}
 
-<script>console.log('%c MSG Soft Glam v4-savor ', 'background:#8C5E40;color:#F3EBE1;padding:4px 8px;border-radius:4px;font-weight:bold');</script>
+<script>console.log('%c MSG Soft Glam v5-savor ', 'background:#8C5E40;color:#F3EBE1;padding:4px 8px;border-radius:4px;font-weight:bold');</script>
 
 {%- if section.settings.hide_theme_chrome -%}
 <style>
@@ -97,8 +97,16 @@
   }
 
   @keyframes msgMarqueeUp { from { transform: translateY(0); } to { transform: translateY(-50%); } }
-  #msg-root .marquee-track { animation: msgMarqueeUp 32s linear infinite; }
-  #msg-root .marquee-pause:hover .marquee-track { animation-play-state: paused; }
+  /* DEFENSA v5: !important para que ningun CSS del tema Savor pause la animacion */
+  #msg-root .marquee-track {
+    animation: msgMarqueeUp 16s linear infinite !important;
+    -webkit-animation: msgMarqueeUp 16s linear infinite !important;
+    will-change: transform;
+    position: absolute !important;
+    inset-inline: 0;
+    top: 0;
+  }
+  #msg-root .marquee-pause:hover .marquee-track { animation-play-state: paused !important; }
 
   @keyframes msgMarqueeLeft { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   #msg-root .row-track { animation: msgMarqueeLeft 46s linear infinite; }
