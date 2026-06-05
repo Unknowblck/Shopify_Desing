@@ -131,9 +131,9 @@
             "width": "fill",
             "custom_width": 70,
             "inherit_color_scheme": true,
+            "color_scheme": "",
             "heading": "We send tasty emails",
             "heading_preset": "h4",
-            "color_scheme": "",
             "border_style": "underline",
             "border_width": 1,
             "border_radius": 100,
@@ -155,6 +155,7 @@
         "group_EJMKU9",
         "email_signup_t3aAfi"
       ],
+      "disabled": true,
       "name": "t:names.footer",
       "settings": {
         "section_width": "page-width",
@@ -211,6 +212,7 @@
         "footer_policy_list_i3GaPF",
         "social_links_Nyht3m"
       ],
+      "disabled": true,
       "settings": {
         "section_width": "page-width",
         "gap": 24,
