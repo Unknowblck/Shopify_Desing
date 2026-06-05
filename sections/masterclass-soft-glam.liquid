@@ -2,10 +2,33 @@
   Masterclass Soft Glam — Alejandra Galeano
   Section autocontenida v4 para el tema Savor.
   Pensada para usarse con templates/page.masterclass-soft-glam.json
-  VERSION: v8-savor (reframe foto hero: object-position centro) — 2026-06-05
+  VERSION: v9-savor (fix layout PC: forzar ancho completo, anti page-width-narrow) — 2026-06-05
 {%- endcomment -%}
 
-<script>console.log('%c MSG Soft Glam v8-savor ', 'background:#8C5E40;color:#F3EBE1;padding:4px 8px;border-radius:4px;font-weight:bold');</script>
+<script>console.log('%c MSG Soft Glam v9-savor ', 'background:#8C5E40;color:#F3EBE1;padding:4px 8px;border-radius:4px;font-weight:bold');</script>
+
+<style>
+  /* DEFENSA v9 — forzar la section a ocupar el ancho completo del viewport.
+     El tema Savor aplica 'page-width-narrow' al body, que comprime nuestra section
+     y rompe layouts (titulos partidos, cards superpuestas, espacios vacios). */
+  body[class*="page-width-narrow"] [id*="shopify-section-template-"][id$="__main"],
+  body [id*="shopify-section-template-"][id$="__main"] {
+    max-width: 100vw !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  /* MainContent y main wrapper tambien al ancho completo cuando contienen nuestra landing */
+  main:has(#msg-root), #MainContent:has(#msg-root) {
+    max-width: 100vw !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin: 0 !important;
+  }
+</style>
 
 {%- if section.settings.hide_theme_chrome -%}
 <style>
@@ -873,12 +896,35 @@
     );
   }
 
+  /* DEFENSA v9: expandir el wrapper de la section a viewport completo
+     (sube por el DOM desde #msg-root y quita constraints de width del tema Savor) */
+  function expandLayoutChain() {
+    const root = document.getElementById('msg-root');
+    if (!root) return;
+    let el = root.parentElement;
+    let depth = 0;
+    while (el && el !== document.body && depth < 10) {
+      el.style.setProperty('max-width', '100vw', 'important');
+      el.style.setProperty('width', '100%', 'important');
+      el.style.setProperty('padding-left', '0', 'important');
+      el.style.setProperty('padding-right', '0', 'important');
+      el.style.setProperty('margin-left', '0', 'important');
+      el.style.setProperty('margin-right', '0', 'important');
+      el = el.parentElement;
+      depth++;
+    }
+  }
+
   /* DEFENSA: espera a que Tailwind cargue antes de renderizar */
   function msgBoot() {
     if (typeof tailwind === 'undefined' || !document.styleSheets.length) {
       return setTimeout(msgBoot, 60);
     }
+    expandLayoutChain();
     ReactDOM.createRoot(document.getElementById('msg-root')).render(<App />);
+    /* Re-aplicar despues de mount por si Savor sobre-escribe */
+    setTimeout(expandLayoutChain, 100);
+    setTimeout(expandLayoutChain, 500);
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', msgBoot);
