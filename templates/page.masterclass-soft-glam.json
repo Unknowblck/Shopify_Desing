@@ -13,7 +13,7 @@
       "type": "masterclass-soft-glam",
       "settings": {
         "hide_theme_chrome": true,
-        "checkout_url": "/products/masterclass-soft-glam"
+        "checkout_url": "/cart/add?id=47733450866882&return_to=/checkout"
       }
     }
   },
