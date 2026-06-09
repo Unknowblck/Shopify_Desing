@@ -2,11 +2,11 @@
   Masterclass Soft Glam — Alejandra Galeano
   Section autocontenida v4 para el tema Savor.
   Pensada para usarse con templates/page.masterclass-soft-glam.json
-  VERSION: v12-savor (fix cards overlap + fecha 26 junio + title responsive) — 2026-06-05
+  VERSION: v13-savor (FIX: max-w-content via CSS directo, centrado real) — 2026-06-05
 {%- endcomment -%}
 
 <script>
-  console.log('%c MSG Soft Glam v12-savor ', 'background:#8C5E40;color:#F3EBE1;padding:4px 8px;border-radius:4px;font-weight:bold');
+  console.log('%c MSG Soft Glam v13-savor ', 'background:#8C5E40;color:#F3EBE1;padding:4px 8px;border-radius:4px;font-weight:bold');
   /* FIX TEMPRANO — quitar las clases page-width del body ANTES de que renderice nada.
      Sin esto, Savor deja el viewport mitad vacio porque su grid de 3 columnas le
      asigna a la section solo la columna central angosta. */
@@ -177,6 +177,11 @@
   #msg-root .reveal { opacity: 1; grid-row: auto !important; grid-column: auto !important; }
   #msg-root .reveal-armed { opacity: 0; transform: translateY(28px); filter: blur(10px); transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1), filter 1s cubic-bezier(.2,.7,.2,1); will-change: opacity, transform, filter; }
   #msg-root .reveal-armed.is-in { opacity: 1; transform: none; filter: blur(0); }
+
+  /* FIX v13: max-w-content via CSS directo (Tailwind CDN no aplica custom config a tiempo) */
+  #msg-root .max-w-content { max-width: 1180px !important; }
+  /* Anti-fallback de margin-auto: garantiza centrado en todos los wrappers que lo usan */
+  #msg-root .mx-auto { margin-left: auto !important; margin-right: auto !important; }
 
   @keyframes msgFloaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
   #msg-root .floaty { animation: msgFloaty 5s ease-in-out infinite; }
