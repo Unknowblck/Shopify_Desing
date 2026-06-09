@@ -2,11 +2,11 @@
   Masterclass Soft Glam — Alejandra Galeano
   Section autocontenida v4 para el tema Savor.
   Pensada para usarse con templates/page.masterclass-soft-glam.json
-  VERSION: v11-savor (perf: React prod + image_url + lazy videos + preload) — 2026-06-05
+  VERSION: v12-savor (fix cards overlap + fecha 26 junio + title responsive) — 2026-06-05
 {%- endcomment -%}
 
 <script>
-  console.log('%c MSG Soft Glam v11-savor ', 'background:#8C5E40;color:#F3EBE1;padding:4px 8px;border-radius:4px;font-weight:bold');
+  console.log('%c MSG Soft Glam v12-savor ', 'background:#8C5E40;color:#F3EBE1;padding:4px 8px;border-radius:4px;font-weight:bold');
   /* FIX TEMPRANO — quitar las clases page-width del body ANTES de que renderice nada.
      Sin esto, Savor deja el viewport mitad vacio porque su grid de 3 columnas le
      asigna a la section solo la columna central angosta. */
@@ -173,9 +173,9 @@
             mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
   }
 
-  /* DEFENSA: reveal por defecto visible; solo se oculta cuando JS le pone reveal-armed */
-  #msg-root .reveal { opacity: 1; }
-  #msg-root .reveal-armed { opacity: 0; transform: translateY(34px) scale(0.985); filter: blur(12px); transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1), filter 1s cubic-bezier(.2,.7,.2,1); will-change: opacity, transform, filter; }
+  /* DEFENSA v12: reveal sin scale() (rompia el grid CSS) + grid-placement explicito */
+  #msg-root .reveal { opacity: 1; grid-row: auto !important; grid-column: auto !important; }
+  #msg-root .reveal-armed { opacity: 0; transform: translateY(28px); filter: blur(10px); transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1), filter 1s cubic-bezier(.2,.7,.2,1); will-change: opacity, transform, filter; }
   #msg-root .reveal-armed.is-in { opacity: 1; transform: none; filter: blur(0); }
 
   @keyframes msgFloaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
@@ -414,7 +414,7 @@
               </div>
             </Reveal>
             <Reveal delay={80}>
-              <h1 className="font-display headline mt-5 text-[32px] font-normal text-ink sm:text-[40px] md:text-[42px] lg:text-[44px] xl:text-[52px]">
+              <h1 className="font-display headline mt-5 text-[30px] font-normal text-ink sm:text-[36px] md:text-[40px] lg:text-[42px] xl:text-[48px]">
                 Domina el <span className="grad-text italic">soft glam</span> y maquíllate como una profesional en un solo día.
               </h1>
             </Reveal>
@@ -431,7 +431,7 @@
                 </span>
                 <span className="whitespace-nowrap">Clase en vivo</span>
                 <span className="opacity-50">·</span>
-                <b className="whitespace-nowrap font-semibold text-ink">sábado 21 de junio</b>
+                <b className="whitespace-nowrap font-semibold text-ink">viernes 26 de junio</b>
                 <span className="opacity-50">·</span>
                 <span className="whitespace-nowrap">cupos limitados</span>
               </div>
@@ -795,7 +795,7 @@
   ];
 
   function Oferta() {
-    const target = new Date('2026-06-21T16:00:00-05:00').getTime();
+    const target = new Date('2026-06-26T16:00:00-05:00').getTime();
     return (
       <Section id="oferta" className="py-20 sm:py-28" container={false}>
         <div className="mx-auto max-w-content px-5 sm:px-8">
