@@ -2,11 +2,11 @@
   Masterclass Soft Glam — Alejandra Galeano
   Section autocontenida v4 para el tema Savor.
   Pensada para usarse con templates/page.masterclass-soft-glam.json
-  VERSION: v14-savor (SIMPLIFICAR: inline styles para centrado, quitar full-bleed) — 2026-06-05
+  VERSION: v15-savor (FIX FINAL: hero 2-cols desde 768px (md), no esperar a 1024px) — 2026-06-05
 {%- endcomment -%}
 
 <script>
-  console.log('%c MSG Soft Glam v14-savor ', 'background:#8C5E40;color:#F3EBE1;padding:4px 8px;border-radius:4px;font-weight:bold');
+  console.log('%c MSG Soft Glam v15-savor ', 'background:#8C5E40;color:#F3EBE1;padding:4px 8px;border-radius:4px;font-weight:bold');
   /* FIX TEMPRANO — quitar las clases page-width del body ANTES de que renderice nada.
      Sin esto, Savor deja el viewport mitad vacio porque su grid de 3 columnas le
      asigna a la section solo la columna central angosta. */
@@ -177,15 +177,21 @@
 
   #msg-root .glow { filter: blur(70px); border-radius: 9999px; opacity: 0.55; }
 
-  /* DEFENSA: grids responsive con !important anti-override del tema */
+  /* v15: grids responsive — hero pasa a 2-cols desde 768px (md), no esperar 1024px */
   @media (max-width: 639px) {
     #msg-root .msg-grid-2, #msg-root .msg-grid-3, #msg-root .msg-grid-4, #msg-root .msg-hero { grid-template-columns: 1fr !important; }
   }
-  @media (min-width: 640px) and (max-width: 1023px) {
+  @media (min-width: 640px) and (max-width: 767px) {
     #msg-root .msg-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
     #msg-root .msg-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
     #msg-root .msg-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
     #msg-root .msg-hero  { grid-template-columns: 1fr !important; }
+  }
+  @media (min-width: 768px) and (max-width: 1023px) {
+    #msg-root .msg-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    #msg-root .msg-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    #msg-root .msg-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    #msg-root .msg-hero  { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr) !important; }
   }
   @media (min-width: 1024px) {
     #msg-root .msg-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
