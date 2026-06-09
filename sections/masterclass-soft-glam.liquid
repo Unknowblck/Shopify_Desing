@@ -2,11 +2,11 @@
   Masterclass Soft Glam — Alejandra Galeano
   Section autocontenida v4 para el tema Savor.
   Pensada para usarse con templates/page.masterclass-soft-glam.json
-  VERSION: v13-savor (FIX: max-w-content via CSS directo, centrado real) — 2026-06-05
+  VERSION: v14-savor (SIMPLIFICAR: inline styles para centrado, quitar full-bleed) — 2026-06-05
 {%- endcomment -%}
 
 <script>
-  console.log('%c MSG Soft Glam v13-savor ', 'background:#8C5E40;color:#F3EBE1;padding:4px 8px;border-radius:4px;font-weight:bold');
+  console.log('%c MSG Soft Glam v14-savor ', 'background:#8C5E40;color:#F3EBE1;padding:4px 8px;border-radius:4px;font-weight:bold');
   /* FIX TEMPRANO — quitar las clases page-width del body ANTES de que renderice nada.
      Sin esto, Savor deja el viewport mitad vacio porque su grid de 3 columnas le
      asigna a la section solo la columna central angosta. */
@@ -25,35 +25,19 @@
 </script>
 
 <style>
-  /* DEFENSA v10 — full bleed: #msg-root rompe los constraints del tema y ocupa viewport completo */
+  /* v14 — SIMPLIFICAR: solo forzar wrappers a width 100%, sin tricks de full-bleed */
   #msg-root {
-    width: 100vw !important;
-    max-width: 100vw !important;
-    position: relative !important;
-    left: 50% !important;
-    right: 50% !important;
-    margin-left: -50vw !important;
-    margin-right: -50vw !important;
-  }
-
-  /* Reset CSS variables de Savor dentro de nuestra section para evitar herencia rara */
-  #msg-root {
-    --page-content-width: 100vw !important;
-    --page-width: 100vw !important;
+    --page-content-width: 100% !important;
+    --page-width: 100% !important;
     --page-margin: 0px !important;
-    --narrow-page-width: 100vw !important;
-    --normal-page-width: 100vw !important;
-    --wide-page-width: 100vw !important;
   }
-
-  /* Wrappers del Shopify section: tambien al ancho completo, sin margin */
   [id*="shopify-section-template-"][id$="__main"] {
-    max-width: 100vw !important;
+    max-width: 100% !important;
     width: 100% !important;
     padding: 0 !important;
     margin: 0 !important;
   }
-  main#MainContent { max-width: 100vw !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
+  main#MainContent { max-width: 100% !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
 </style>
 
 {%- if section.settings.hide_theme_chrome -%}
@@ -296,10 +280,12 @@
     return <Tag ref={ref} className={`reveal ${className}`} style={{ transitionDelay: `${delay}ms` }} {...rest}>{children}</Tag>;
   }
 
+  /* v14: inline style en lugar de Tailwind clases para garantizar centrado */
+  const MSG_CENTERED = { maxWidth: '1180px', marginLeft: 'auto', marginRight: 'auto', width: '100%' };
   function Section({ id, className = '', children, container = true }) {
     return (
       <section id={id} className={`px-5 sm:px-8 ${className}`}>
-        {container ? <div className="mx-auto w-full max-w-content">{children}</div> : children}
+        {container ? <div style={MSG_CENTERED}>{children}</div> : children}
       </section>
     );
   }
@@ -347,7 +333,7 @@
     const links = [['El método', 'metodo'], ['Sobre Alejandra', 'sobre'], ['Testimonios', 'testimonios'], ['Preguntas', 'faq']];
     return (
       <header className={`sticky top-0 z-50 transition-all duration-500 ${solid ? 'bg-cream/80 backdrop-blur-xl border-b border-line/70' : 'bg-transparent border-b border-transparent'}`}>
-        <div className="mx-auto flex h-[68px] max-w-content items-center justify-between px-5 sm:px-8">
+        <div className="flex h-[68px] items-center justify-between px-5 sm:px-8" style={MSG_CENTERED}>
           <a href="#top" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="font-display text-[21px] font-medium tracking-tight text-ink">Alejandra Galeano</a>
           <nav className="hidden items-center gap-8 md:flex">
             {links.map(([label, id]) => (
@@ -582,7 +568,7 @@
   function Aprender() {
     return (
       <section id="metodo" className="px-5 sm:px-8">
-        <Reveal className="relative mx-auto mt-2 w-full max-w-content overflow-hidden rounded-[36px] bg-ink px-6 py-16 sm:px-12 sm:py-20">
+        <Reveal className="relative mt-2 overflow-hidden rounded-[36px] bg-ink px-6 py-16 sm:px-12 sm:py-20" style={MSG_CENTERED}>
           <div className="relative mx-auto max-w-2xl">
             <div className="inline-flex items-center"><span className="text-[11px] font-medium tracking-[0.3em] uppercase text-peach">El temario</span></div>
             <h2 className="font-display headline mt-5 text-[32px] font-normal text-cream sm:text-[44px]">El método soft glam, paso a paso.</h2>
@@ -752,7 +738,7 @@
     );
     return (
       <section id="clases" className="py-16 sm:py-24">
-        <Reveal className="mx-auto w-full max-w-content px-5 sm:px-8">
+        <Reveal className="px-5 sm:px-8" style={MSG_CENTERED}>
           <Eyebrow>Reseñas</Eyebrow>
           <h2 className="font-display headline mt-5 max-w-2xl text-[32px] font-normal text-ink sm:text-[44px]">Cientos de mujeres ya lo lograron.</h2>
           <p className="mt-5 max-w-2xl text-[16.5px] leading-relaxed text-ink/60">Esto es lo que cuentan las alumnas que ya tomaron la masterclass y hoy se maquillan solas. Pasa el cursor para detener el desplazamiento y leer con calma.</p>
@@ -803,7 +789,7 @@
     const target = new Date('2026-06-26T16:00:00-05:00').getTime();
     return (
       <Section id="oferta" className="py-20 sm:py-28" container={false}>
-        <div className="mx-auto max-w-content px-5 sm:px-8">
+        <div className="px-5 sm:px-8" style={MSG_CENTERED}>
           <Reveal>
             <div className="relative overflow-hidden rounded-[36px] border border-line bg-white/60 px-6 py-12 backdrop-blur sm:px-12 sm:py-16">
               <div className="pointer-events-none absolute -top-16 left-1/2 h-64 w-64 -translate-x-1/2 glow" style={{ background: '#D8B58A' }}></div>
@@ -887,7 +873,7 @@
   function Footer() {
     return (
       <footer className="bg-ink px-5 pt-16 pb-10 text-cream/80 sm:px-8">
-        <div className="mx-auto max-w-content">
+        <div style={MSG_CENTERED}>
           <div className="flex flex-col gap-10 border-b border-white/10 pb-10 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-md">
               <div className="font-display text-[26px] font-medium text-cream">Alejandra Galeano</div>
